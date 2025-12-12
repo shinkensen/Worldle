@@ -20,6 +20,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="scroll-smooth">
+      <head>
+        <script src="https://unpkg.com/topojson-client@3"></script>
+      </head>
       <body className={`${poppins.className} antialiased`}>{children}</body>
     </html>
   );
