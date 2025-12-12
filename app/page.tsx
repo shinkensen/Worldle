@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { countries, Country } from "@/lib/countries";
-import { getDistanceFromLatLonInKm, getDirection } from "@/lib/utils";
+import { getDistanceFromLatLonInKm } from "@/lib/utils";
 import dynamic from "next/dynamic";
 
 const Globe = dynamic(() => import("react-globe.gl"), { ssr: false });
@@ -10,7 +10,6 @@ const Globe = dynamic(() => import("react-globe.gl"), { ssr: false });
 interface Guess {
   country: Country;
   distance: number;
-  direction: string;
 }
 
 interface GlobePoint {
@@ -118,18 +117,10 @@ export default function Home() {
       targetCountry.latitude,
       targetCountry.longitude
     );
-
-    const direction = getDirection(
-      guessedCountry.latitude,
-      guessedCountry.longitude,
-      targetCountry.latitude,
-      targetCountry.longitude
-    );
-
+//hi!
     const newGuess: Guess = {
       country: guessedCountry,
       distance,
-      direction,
     };
 
     setGuesses([newGuess, ...guesses]);
@@ -149,21 +140,6 @@ export default function Home() {
     };
     
     setGlobePoints([...globePoints, newPoint]);
-    
-    // Add arc from guess to target
-    const newArc = {
-      startLat: guessedCountry.latitude,
-      startLng: guessedCountry.longitude,
-      endLat: targetCountry.latitude,
-      endLng: targetCountry.longitude,
-      color: [pointColor, pointColor],
-      dashLength: 0.3,
-      dashGap: 0.2,
-      dashAnimateTime: 3000,
-      stroke: 2,
-    };
-    
-    setArcs([...arcs, newArc]);
 
     // Animate camera to guessed location
     if (globeEl.current) {
@@ -292,12 +268,12 @@ export default function Home() {
           <p className="text-base text-gray-300 mb-1">Guess the mystery country on the globe!</p>
         </div>
 
-        {/* Game Layout: Globe + Controls Side by Side */}
-        <div className="grid lg:grid-cols-2 gap-6 items-start max-w-7xl mx-auto">
+        {/* Game Layout: Mobile-first with centered globe */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 items-start max-w-7xl mx-auto">
           
-          {/* Left Side: 3D Globe */}
-          <div className="relative">
-            <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden" style={{ height: "600px" }}>
+          {/* Globe (centered on mobile, left on desktop) */}
+          <div className="relative w-full order-2 lg:order-1">
+            <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden h-[400px] md:h-[500px] lg:h-[600px]">
               <Globe
                 ref={globeEl}
                 globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
@@ -316,17 +292,6 @@ export default function Home() {
                 pointAltitude="altitude"
                 pointRadius="size"
                 pointLabel="label"
-                
-                arcsData={arcs}
-                arcStartLat="startLat"
-                arcStartLng="startLng"
-                arcEndLat="endLat"
-                arcEndLng="endLng"
-                arcColor="color"
-                arcDashLength="dashLength"
-                arcDashGap="dashGap"
-                arcDashAnimateTime="dashAnimateTime"
-                arcStroke="stroke"
                 
                 atmosphereColor="rgba(139, 92, 246, 0.5)"
                 atmosphereAltitude={0.2}
@@ -348,8 +313,8 @@ export default function Home() {
             </div>
           </div>
 
-          {/* Right Side: Controls & Guesses */}
-          <div className="flex flex-col gap-6">
+          {/* Controls & Guesses (top on mobile, right on desktop) */}
+          <div className="flex flex-col gap-6 w-full order-1 lg:order-2">
             
             {/* Input Section */}
             <div>
@@ -451,10 +416,7 @@ export default function Home() {
                       <div className="font-bold text-lg mb-1">{guess.country.name}</div>
                       <div className="flex gap-3 text-xs opacity-90">
                         <span className="font-mono font-semibold">
-                          {Math.round(guess.distance).toLocaleString()} km
-                        </span>
-                        <span className="font-bold text-xl">
-                          {getDirectionArrow(guess.direction)}
+                          {Math.round(guess.distance).toLocaleString()} km away
                         </span>
                       </div>
                     </div>
