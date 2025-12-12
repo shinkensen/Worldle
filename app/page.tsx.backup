@@ -258,179 +258,182 @@ export default function Home() {
 
   return (
     <>
-    <main className="relative min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
-      {/* Full-screen Globe Background */}
-      <div className="absolute inset-0 z-0">
-        <Globe
-          ref={globeEl}
-          width={typeof window !== 'undefined' ? window.innerWidth : 1000}
-          height={typeof window !== 'undefined' ? window.innerHeight : 800}
-          globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
-          backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
-          
-          polygonsData={countryPolygons}
-          polygonCapColor={getPolygonColor}
-          polygonSideColor={() => 'rgba(0, 0, 0, 0.1)'}
-          polygonStrokeColor={() => 'rgba(255, 255, 255, 0.3)'}
-          polygonAltitude={0.01}
-          
-          pointsData={globePoints}
-          pointLat="lat"
-          pointLng="lng"
-          pointColor="color"
-          pointAltitude="altitude"
-          pointRadius="size"
-          pointLabel="label"
-          
-          atmosphereColor="rgba(139, 92, 246, 0.5)"
-          atmosphereAltitude={0.2}
-        />
-      </div>
-
-      {/* Overlay UI */}
-      <div className="relative z-10 min-h-screen flex flex-col items-center justify-center p-4 pointer-events-none">
-        {/* Header */}
-        <div className="text-center mb-6 pointer-events-auto">
-          <h1 className="text-4xl md:text-5xl font-extrabold mb-2 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-lg">
+    <main className="min-h-screen bg-gradient-to-br from-slate-900 via-purple-900 to-slate-900 text-white overflow-hidden">
+      {/* Header */}
+      <div className="container mx-auto px-4 py-6 relative z-10">
+        <div className="text-center mb-6">
+          <h1 className="text-5xl md:text-6xl font-extrabold mb-3 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent">
             🌍 WORLDLE
           </h1>
-          <p className="text-sm text-gray-200 drop-shadow-md">Guess the mystery country on the globe!</p>
+          <p className="text-base text-gray-300 mb-1">Guess the mystery country on the globe!</p>
         </div>
 
-        {/* Main Game Container with Liquid Glass Effect */}
-        <div className="w-full max-w-2xl pointer-events-auto">
-          {/* Stats Bar */}
-          <div className="flex justify-center gap-3 mb-4">
-            <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/30 shadow-2xl">
-              <div className="text-xs text-gray-200">Attempts</div>
-              <div className="text-xl font-bold">{guesses.length}</div>
+        {/* Game Layout: Mobile-first with centered globe */}
+        <div className="flex flex-col lg:grid lg:grid-cols-2 gap-6 items-start max-w-7xl mx-auto">
+          
+          {/* Globe (centered on mobile, left on desktop) */}
+          <div className="relative w-full order-2 lg:order-1">
+            <div className="bg-black/30 backdrop-blur-sm border border-white/10 rounded-2xl overflow-hidden h-[400px] md:h-[500px] lg:h-[600px]">
+              <Globe
+                ref={globeEl}
+                globeImageUrl="//unpkg.com/three-globe/example/img/earth-night.jpg"
+                backgroundImageUrl="//unpkg.com/three-globe/example/img/night-sky.png"
+                
+                polygonsData={countryPolygons}
+                polygonCapColor={getPolygonColor}
+                polygonSideColor={() => 'rgba(0, 0, 0, 0.1)'}
+                polygonStrokeColor={() => 'rgba(255, 255, 255, 0.3)'}
+                polygonAltitude={0.01}
+                
+                pointsData={globePoints}
+                pointLat="lat"
+                pointLng="lng"
+                pointColor="color"
+                pointAltitude="altitude"
+                pointRadius="size"
+                pointLabel="label"
+                
+                atmosphereColor="rgba(139, 92, 246, 0.5)"
+                atmosphereAltitude={0.2}
+              />
             </div>
-            {gameOver && (
-              <div className="bg-white/10 backdrop-blur-xl px-4 py-2 rounded-2xl border border-white/30 shadow-2xl">
-                <div className="text-xs text-gray-200">Result</div>
-                <div className="text-xl font-bold">{win ? "🏆 WIN" : "❌ LOST"}</div>
+            
+            {/* Globe Stats Overlay */}
+            <div className="absolute top-4 left-4 right-4 flex justify-between gap-3 pointer-events-none">
+              <div className="bg-black/60 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20 pointer-events-auto">
+                <div className="text-xs text-gray-300">Attempts</div>
+                <div className="text-xl font-bold">{guesses.length}</div>
               </div>
-            )}
+              {gameOver && (
+                <div className="bg-black/60 backdrop-blur-sm px-4 py-2 rounded-xl border border-white/20 pointer-events-auto">
+                  <div className="text-xs text-gray-300">Result</div>
+                  <div className="text-xl font-bold">{win ? "🏆 WIN" : "❌ LOST"}</div>
+                </div>
+              )}
+            </div>
           </div>
 
+          {/* Controls & Guesses (top on mobile, right on desktop) */}
+          <div className="flex flex-col gap-6 w-full order-1 lg:order-2">
+            
             {/* Input Section */}
-            {!gameOver ? (
-              <form onSubmit={handleGuess} className="relative">
-                <div className="relative">
-                  <input
-                    ref={inputRef}
-                    type="text"
-                    value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
-                    onKeyDown={handleKeyDown}
-                    onFocus={() => inputValue && setShowSuggestions(true)}
-                    placeholder="Type a country name..."
-                    className="w-full px-6 py-4 text-lg bg-white/10 backdrop-blur-xl border-2 border-white/30 rounded-2xl text-white placeholder-gray-300 focus:outline-none focus:border-purple-400 focus:bg-white/20 transition-all shadow-lg"
-                    autoComplete="off"
-                  />
+            <div>
+              {!gameOver ? (
+                <form onSubmit={handleGuess} className="relative">
+                  <div className="relative">
+                    <input
+                      ref={inputRef}
+                      type="text"
+                      value={inputValue}
+                      onChange={(e) => setInputValue(e.target.value)}
+                      onKeyDown={handleKeyDown}
+                      onFocus={() => inputValue && setShowSuggestions(true)}
+                      placeholder="Type a country name..."
+                      className="w-full px-6 py-4 text-lg bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl text-white placeholder-gray-400 focus:outline-none focus:border-purple-400 transition-all"
+                      autoComplete="off"
+                    />
+                    <button
+                      type="submit"
+                      className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-6 py-2 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+                    >
+                      Guess
+                    </button>
+                  </div>
+
+                  {/* Suggestions Dropdown */}
+                  {showSuggestions && filteredCountries.length > 0 && (
+                    <div className="absolute z-10 w-full mt-2 bg-slate-800/95 backdrop-blur-sm border border-white/20 rounded-xl shadow-2xl max-h-60 overflow-y-auto">
+                      {filteredCountries.slice(0, 8).map((country, index) => (
+                        <button
+                          key={country.code}
+                          type="button"
+                          onClick={() => selectCountry(country)}
+                          className={`w-full text-left px-6 py-3 hover:bg-purple-500/30 transition-colors ${
+                            index === selectedIndex ? "bg-purple-500/40" : ""
+                          } ${index === 0 ? "rounded-t-xl" : ""} ${
+                            index === Math.min(7, filteredCountries.length - 1)
+                              ? "rounded-b-xl"
+                              : ""
+                          }`}
+                        >
+                          <span className="font-medium">{country.name}</span>
+                          <span className="text-gray-400 text-sm ml-2">({country.code})</span>
+                        </button>
+                      ))}
+                    </div>
+                  )}
+                </form>
+              ) : (
+                <div className="text-center space-y-4">
+                  <div className="bg-white/10 backdrop-blur-sm border-2 border-white/20 rounded-2xl p-6">
+                    <h2 className="text-3xl font-bold mb-3">
+                      {win ? "🎉 Congratulations!" : "😔 Game Over"}
+                    </h2>
+                    <p className="text-lg text-gray-300 mb-1">
+                      The country was:
+                    </p>
+                    <p className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                      {targetCountry?.name}
+                    </p>
+                    <p className="text-gray-400 mt-3 text-sm">
+                      You guessed it in {guesses.length} {guesses.length === 1 ? "attempt" : "attempts"}!
+                    </p>
+                  </div>
                   <button
-                    type="submit"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 bg-gradient-to-r from-purple-500 to-pink-500 hover:from-purple-600 hover:to-pink-600 px-6 py-2 rounded-xl font-semibold transition-all transform hover:scale-105 shadow-lg"
+                    onClick={startNewGame}
+                    className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 px-6 py-3 rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg"
                   >
-                    Guess
+                    🔄 Play Again
                   </button>
                 </div>
+              )}
 
-                {/* Suggestions Dropdown */}
-                {showSuggestions && filteredCountries.length > 0 && (
-                  <div className="absolute z-20 w-full mt-2 bg-white/10 backdrop-blur-2xl border border-white/30 rounded-2xl shadow-2xl max-h-60 overflow-y-auto">
-                    {filteredCountries.slice(0, 8).map((country, index) => (
-                      <button
-                        key={country.code}
-                        type="button"
-                        onClick={() => selectCountry(country)}
-                        className={`w-full text-left px-6 py-3 hover:bg-white/20 transition-colors ${
-                          index === selectedIndex ? "bg-white/25" : ""
-                        } ${index === 0 ? "rounded-t-2xl" : ""} ${
-                          index === Math.min(7, filteredCountries.length - 1)
-                            ? "rounded-b-2xl"
-                            : ""
-                        }`}
-                      >
-                        <span className="font-medium">{country.name}</span>
-                        <span className="text-gray-300 text-sm ml-2">({country.code})</span>
-                      </button>
-                    ))}
-                  </div>
-                )}
-              </form>
-            ) : (
-              <div className="text-center space-y-4">
-                <div className="bg-white/10 backdrop-blur-xl border-2 border-white/30 rounded-2xl p-6 shadow-xl">
-                  <h2 className="text-3xl font-bold mb-3">
-                    {win ? "🎉 Congratulations!" : "😔 Game Over"}
-                  </h2>
-                  <p className="text-lg text-gray-200 mb-1">
-                    The country was:
-                  </p>
-                  <p className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
-                    {targetCountry?.name}
-                  </p>
-                  <p className="text-gray-300 mt-3 text-sm">
-                    You guessed it in {guesses.length} {guesses.length === 1 ? "attempt" : "attempts"}!
-                  </p>
+              {/* Error Message */}
+              {error && (
+                <div className="mt-4 bg-red-500/20 border border-red-500/50 text-red-200 px-4 py-3 rounded-xl text-center animate-pulse text-sm">
+                  {error}
                 </div>
-                <button
-                  onClick={startNewGame}
-                  className="w-full bg-gradient-to-r from-green-500 to-emerald-600 hover:from-green-600 hover:to-emerald-700 px-6 py-3 rounded-xl font-bold transition-all transform hover:scale-105 shadow-lg"
-                >
-                  🔄 Play Again
-                </button>
-              </div>
-            )}
-
-            {/* Error Message */}
-            {error && (
-              <div className="bg-red-500/20 backdrop-blur-xl border border-red-500/40 text-red-200 px-4 py-3 rounded-xl text-center animate-pulse text-sm shadow-lg">
-                {error}
-              </div>
-            )}
+              )}
+            </div>
 
             {/* Guesses List */}
-            {guesses.length > 0 && (
-              <div className="space-y-2 max-h-[200px] md:max-h-[280px] overflow-y-auto pr-2">
-                <h3 className="text-sm font-semibold text-gray-200 mb-2 sticky top-0 bg-white/10 backdrop-blur-xl py-2 rounded-xl px-3 border border-white/20">
-                  Your Guesses:
-                </h3>
-                {guesses.map((guess, index) => (
-                  <div
-                    key={index}
-                    className={`bg-gradient-to-r ${getColor(
-                      guess.distance
-                    )} ${getTextColor(
-                      guess.distance
-                    )} p-4 rounded-xl shadow-lg transform transition-all duration-500 hover:scale-102 animate-slideIn`}
-                    style={{ animationDelay: `${index * 50}ms` }}
-                  >
-                    <div className="flex items-center justify-between">
-                      <div>
-                        <div className="font-bold text-base mb-1">{guess.country.name}</div>
-                        <div className="text-xs opacity-90">
-                          <span className="font-mono font-semibold">
-                            {Math.round(guess.distance).toLocaleString()} km away
-                          </span>
-                        </div>
+            <div className="space-y-2 max-h-[400px] overflow-y-auto pr-2">
+              {guesses.length > 0 && (
+                <h3 className="text-lg font-semibold text-gray-300 mb-3 sticky top-0 bg-slate-900/80 backdrop-blur-sm py-2">Your Guesses:</h3>
+              )}
+              {guesses.map((guess, index) => (
+                <div
+                  key={index}
+                  className={`bg-gradient-to-r ${getColor(
+                    guess.distance
+                  )} ${getTextColor(
+                    guess.distance
+                  )} p-4 rounded-xl shadow-lg transform transition-all duration-500 hover:scale-102 animate-slideIn`}
+                  style={{ animationDelay: `${index * 50}ms` }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div>
+                      <div className="font-bold text-lg mb-1">{guess.country.name}</div>
+                      <div className="flex gap-3 text-xs opacity-90">
+                        <span className="font-mono font-semibold">
+                          {Math.round(guess.distance).toLocaleString()} km away
+                        </span>
                       </div>
-                      <div className="text-right">
-                        <div className="text-lg font-extrabold">
-                          {getHotColdText(guess.distance)}
-                        </div>
+                    </div>
+                    <div className="text-right">
+                      <div className="text-xl font-extrabold">
+                        {getHotColdText(guess.distance)}
                       </div>
                     </div>
                   </div>
-                ))}
-              </div>
-            )}
+                </div>
+              ))}
+            </div>
 
             {/* Legend */}
             {guesses.length === 0 && !gameOver && (
-              <div className="bg-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 shadow-lg">
-                <h3 className="text-sm font-semibold mb-3 text-center text-gray-200">🎯 Distance Guide</h3>
+              <div className="bg-white/5 backdrop-blur-sm border border-white/10 rounded-2xl p-5">
+                <h3 className="text-base font-semibold mb-3 text-center">🎯 Distance Guide</h3>
                 <div className="grid grid-cols-5 gap-2">
                   <div className="text-center">
                     <div className="bg-gradient-to-r from-emerald-500 to-green-600 p-2 rounded-lg mb-1">
