@@ -1,0 +1,53 @@
+export interface Country {
+  code: string;
+  name: string;
+  latitude: number;
+  longitude: number;
+}
+
+export const countries: Country[] = [
+  { code: "AF", name: "Afghanistan", latitude: 33.93911, longitude: 67.709953 },
+  { code: "AL", name: "Albania", latitude: 41.153332, longitude: 20.168331 },
+  { code: "DZ", name: "Algeria", latitude: 28.033886, longitude: 1.659626 },
+  { code: "AR", name: "Argentina", latitude: -38.416097, longitude: -63.616672 },
+  { code: "AU", name: "Australia", latitude: -25.274398, longitude: 133.775136 },
+  { code: "AT", name: "Austria", latitude: 47.516231, longitude: 14.550072 },
+  { code: "BE", name: "Belgium", latitude: 50.503887, longitude: 4.469936 },
+  { code: "BR", name: "Brazil", latitude: -14.235004, longitude: -51.92528 },
+  { code: "CA", name: "Canada", latitude: 56.130366, longitude: -106.346771 },
+  { code: "CN", name: "China", latitude: 35.86166, longitude: 104.195397 },
+  { code: "CO", name: "Colombia", latitude: 4.570868, longitude: -74.297333 },
+  { code: "DK", name: "Denmark", latitude: 56.26392, longitude: 9.501785 },
+  { code: "EG", name: "Egypt", latitude: 26.820553, longitude: 30.802498 },
+  { code: "FI", name: "Finland", latitude: 61.92411, longitude: 25.748151 },
+  { code: "FR", name: "France", latitude: 46.227638, longitude: 2.213749 },
+  { code: "DE", name: "Germany", latitude: 51.165691, longitude: 10.451526 },
+  { code: "GR", name: "Greece", latitude: 39.074208, longitude: 21.824312 },
+  { code: "IN", name: "India", latitude: 20.593684, longitude: 78.96288 },
+  { code: "ID", name: "Indonesia", latitude: -0.789275, longitude: 113.921327 },
+  { code: "IR", name: "Iran", latitude: 32.427908, longitude: 53.688046 },
+  { code: "IQ", name: "Iraq", latitude: 33.223191, longitude: 43.679291 },
+  { code: "IE", name: "Ireland", latitude: 53.142367, longitude: -7.692054 },
+  { code: "IL", name: "Israel", latitude: 31.046051, longitude: 34.851612 },
+  { code: "IT", name: "Italy", latitude: 41.87194, longitude: 12.56738 },
+  { code: "JP", name: "Japan", latitude: 36.204824, longitude: 138.252924 },
+  { code: "MX", name: "Mexico", latitude: 23.634501, longitude: -102.552784 },
+  { code: "NL", name: "Netherlands", latitude: 52.132633, longitude: 5.291266 },
+  { code: "NZ", name: "New Zealand", latitude: -40.900557, longitude: 174.885971 },
+  { code: "NG", name: "Nigeria", latitude: 9.081999, longitude: 8.675277 },
+  { code: "NO", name: "Norway", latitude: 60.472024, longitude: 8.468946 },
+  { code: "PK", name: "Pakistan", latitude: 30.375321, longitude: 69.345116 },
+  { code: "PL", name: "Poland", latitude: 51.919438, longitude: 19.145136 },
+  { code: "PT", name: "Portugal", latitude: 39.399872, longitude: -8.224454 },
+  { code: "RU", name: "Russia", latitude: 61.52401, longitude: 105.318756 },
+  { code: "SA", name: "Saudi Arabia", latitude: 23.885942, longitude: 45.079162 },
+  { code: "ZA", name: "South Africa", latitude: -30.559482, longitude: 22.937506 },
+  { code: "KR", name: "South Korea", latitude: 35.907757, longitude: 127.766922 },
+  { code: "ES", name: "Spain", latitude: 40.463667, longitude: -3.74922 },
+  { code: "SE", name: "Sweden", latitude: 60.128161, longitude: 18.643501 },
+  { code: "CH", name: "Switzerland", latitude: 46.818188, longitude: 8.227512 },
+  { code: "TR", name: "Turkey", latitude: 38.963745, longitude: 35.243322 },
+  { code: "UA", name: "Ukraine", latitude: 48.379433, longitude: 31.16558 },
+  { code: "GB", name: "United Kingdom", latitude: 55.378051, longitude: -3.435973 },
+  { code: "US", name: "United States", latitude: 37.09024, longitude: -95.712891 },
+];
