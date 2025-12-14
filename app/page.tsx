@@ -361,8 +361,8 @@ export default function Home() {
 
         <div className="relative z-10 w-full max-w-2xl pointer-events-auto">
           <div className="text-center mb-8">
-            <h1 className="text-5xl md:text-7xl font-extrabold mb-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 bg-clip-text text-transparent drop-shadow-2xl">
-              🌍 WORLDLE
+            <h1 className="text-5xl md:text-7xl font-extrabold mb-4 bg-clip-text text-transparent drop-shadow-2xl">
+              WORLDLE
             </h1>
             <p className="text-lg text-gray-200 drop-shadow-md">Guess the mystery country on the globe!</p>
           </div>
